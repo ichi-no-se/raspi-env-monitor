@@ -50,8 +50,6 @@ def interpolate_color(value, color_map):
 
 
 def get_color_for_discomfort(index):
-    if index is None:
-        return "gray"
     return interpolate_color(index, [
         (55, (128, 0, 255)),
         (60, (0, 64, 255)),
@@ -65,8 +63,6 @@ def get_color_for_discomfort(index):
 
 
 def get_color_for_co2(ppm):
-    if ppm is None:
-        return "gray"
     return interpolate_color(ppm, [
         (400, (0, 200, 255)),
         (800, (80, 255, 80)),
@@ -120,8 +116,10 @@ def main():
 
         caption_color = "#999"
         value_color = "#ddd"
-        co2_color = get_color_for_co2(co2)
-        discomfort_color = get_color_for_discomfort(discomfort_index)
+        missing_color = "#999"
+        
+        co2_color = get_color_for_co2(co2) if co2 is not None else missing_color
+        discomfort_color = get_color_for_discomfort(discomfort_index) if discomfort_index is not None else missing_color
 
         with canvas(device) as draw:
             x_space = 5
@@ -143,7 +141,7 @@ def main():
             y2 = y1 + y_gap
             x3 = x2
 
-            draw.text((x3, y2), pressure_str, fill=value_color,
+            draw.text((x3, y2), pressure_str, fill=value_color if pressure is not None else missing_color,
                       font=big_font, anchor="rb")
             draw.text((x3 + x_space, y2), "hPa", fill=caption_color,
                       font=small_font, anchor="lb")
@@ -151,14 +149,14 @@ def main():
             y3 = y2 + y_gap
             x4 = 130
 
-            draw.text((x4, y3), temp_str, fill=value_color,
+            draw.text((x4, y3), temp_str, fill=value_color if temp is not None else missing_color,
                       font=big_font, anchor="rb")
             draw.text((x4 + x_space, y3), "℃", fill=caption_color,
                       font=small_font, anchor="lb")
 
             x5 = 270
 
-            draw.text((x5, y3), humidity_str, fill=value_color,
+            draw.text((x5, y3), humidity_str, fill=value_color if humidity is not None else missing_color,
                       font=big_font, anchor="rb")
             draw.text((x5 + x_space, y3), "%", fill=caption_color,
                       font=small_font, anchor="lb")
