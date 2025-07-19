@@ -1,1 +1,4 @@
-venv/
+*
+!src
+!src/*.py
+!README.md
