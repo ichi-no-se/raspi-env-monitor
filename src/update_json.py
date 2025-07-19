@@ -24,4 +24,4 @@ def update_sensor_data(sensor_key, data_dict):
 
         f.seek(0)
         f.truncate()
-        json.dump(all_data, f, indent=2)
+        json.dump(all_data, f)
